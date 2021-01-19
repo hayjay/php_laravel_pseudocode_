@@ -47,7 +47,9 @@ class PdfController extends Controller
             ], 422);
         }
 
-        //I have made use of the updateOrCreate method here because the requirement is to check if we already have the same pdf with same name and size if so then we don't need to add a new row into the table we would need to update the existing one using the below condition
+        /**
+            I have made use of the updateOrCreate method here because the requirement is to check if we already have the same pdf with same name and size if so then we don't need to add a new row into the table we would need to update the existing one using the below condition
+        */
         
         $update_criteria = [
             "name" => $fileName,
