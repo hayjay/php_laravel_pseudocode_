@@ -5,33 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Services\PdfService;
+use App\Http\Requests\PdfStoreRequest;
 
 class PdfController extends Controller
 {
     protected $pdfService;
+    private $lang;
 
     public function __construct(PdfService $pdfService) {
         $this->pdfService = $pdfService;
+        $this->lang = "pdfcontroller_messages.";
+
     }
 
-    public function save(Request $request)
-    {
-        $validator = Validator::make([
-            "file" => "'required|mimes:pdf'"
-        ], $request);
-
-        if (!$validator->validate()) {
-            return response()->json([
-                "message" => "failed to save", 
-                "errors" => $validator->errors()
-            ], 422);
-        }
+    public function save(PdfStoreRequest $request)    {
+        $validatedData = $request->validated();
 
         try {
             $this->pdfService->searchFor($request->file, "Proposal");
         } catch (\Throwable $th) {
             return response()->json([
-                "message" => "Proposal not found",
+                "message" => trans($this->lang.'not_found'),
             ], 422);
         }
 
@@ -43,7 +37,7 @@ class PdfController extends Controller
             $filePath = $this->pdfService->save($file, $fileName);
         } catch (\Throwable $th) {
             return response()->json([
-                "message" => "Error Occured while saving file",
+                "message" => trans($this->lang."save_error"),
             ], 422);
         }
 
@@ -61,8 +55,8 @@ class PdfController extends Controller
         ], $update_criteria);
 
         return response()->json([
-            "message" => "Pdf uploaded successfully!",
+            "message" => trans($this->lang."success"),
             "pdf" => $pdf
-        ]);
+        ], 201);
     }
 }

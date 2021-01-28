@@ -18,7 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('country/{country}', [QueryController::class, 'showCountry']);
-Route::get('country/{country}/users', [QueryController::class, 'showCountryUsers']);
+Route::get('user-companies-by-country/{id}', [QueryController::class, 'getCompaniesUsersByCountry']);
+
+Route::get('country/{id}', [QueryController::class, 'showCountry']);
+Route::get('country/{id}/users', [QueryController::class, 'showCountryUsers']);
 Route::get('companies', [QueryController::class, 'showCompanies']);
+
 Route::post('pdf', [PdfController::class, 'save']);
